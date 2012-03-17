@@ -101,14 +101,14 @@ public class Actor {
 			}
 			
 			//Chequeamos la celda de la derecha
-			if(cellX!=14 && cellX + 1 < movements.length && movements[cellX+1][cellY].allowed && left==false)
+			if(cellX!=14 && cellX + 1 < movements.length && movements[cellX+1][cellY].allowed)
 				right = true;
 			else
 				right=false;
 			
 			//Chequeamos la celda de abajo
 			if(cellY!=0){
-			 if(movements[cellX][cellY - 1].allowed && up==false)
+			 if(movements[cellX][cellY + 1].allowed)
 				down = true;
 			else
 				down=false;
@@ -116,71 +116,119 @@ public class Actor {
 				down=false;
 			
 			//Chequeamos la celda de arriba
-			 if(cellY!=9 && cellY + 1 < movements[cellY].length && movements[cellX][cellY+1].allowed && down==false)
+			 if(cellY!=9 && cellY + 1 < movements[cellY].length && movements[cellX][cellY-1].allowed)
 				up = true;
 			 else
 				up=false;
 			 
 			//Chequeamos la celda de la izquierda 
-			 if(cellX!=0 && cellX - 1 > 0 && movements[cellX-1][cellY].allowed && right==false)
+			 if(cellX!=0 && cellX - 1 > 0 && movements[cellX-1][cellY].allowed)
 				left = true;
 			 else
 				left=false;
 			
-		
-			if(lastMoveRight==true && right==true){
+			 
+			if(lastMoveRight==true){
+				if(right){
 				right = true;
 				up = false;
 				left = false;
-				down = false;
-			}
-			else if(lastMoveLeft==true && left==true){
+				down = false;}
+				else if(down){
 				right = false;
 				up = false;
-				left = true;
-				down = false;
-			}
-			else if(lastMoveUp==true && up==true){
+				left = false;
+				down = true;}
+				else if(up){
 				right = false;
 				up = true;
 				left = false;
-				down = false;
+				down = false;}
+				else if(left){
+				right = false;
+				up = false;
+				left = true;
+				down = false;}	
 			}
-			else if(lastMoveDown==true && down==true){
+			else if(lastMoveLeft==true){
+				if(left){
+				right = false;
+				up = false;
+				left = true;
+				down = false;}
+				else if(up){
+				right = false;
+				up = true;
+				left = false;
+				down = false;}
+				else if(down){
 				right = false;
 				up = false;
 				left = false;
-				down = true;
+				down = true;}
+				else if(right){
+				right = true;
+				up = false;
+				left = false;
+				down = false;}	
+			}
+			else if(lastMoveUp==true){
+				if(up){
+				right = false;
+				up = true;
+				left = false;
+				down = false;}
+				else if(right){
+				right = true;
+				up = false;
+				left = false;
+				down = false;}	
+				else if(left){
+				right = false;
+				up = false;
+				left = true;
+				down = false;}
+				else if(down){
+				right = false;
+				up = false;
+				left = false;
+				down = true;}	
+			}
+			else if(lastMoveDown==true){
+				if(down){
+				right = false;
+				up = false;
+				left = false;
+				down = true;}
+				else if(left){
+				right = false;
+				up = false;
+				left = true;
+				down = false;}
+				else if(right){
+				right = true;
+				up = false;
+				left = false;
+				down = false;}	
+				else if(up){
+				right = false;
+				up = true;
+				left = false;
+				down = false;}	
 			}
 			
-			if(right && lastMoveLeft==false){
+			if(right){
 				velX = speed;
 				velY = 0F;
-				
-				up = false;
-				left = false;
-				down = false;
-			}else if(up  && lastMoveDown==false){
-				velY = speed;
+			}else if(down){
+				velY = +speed;
 				velX = 0F;
-				
-				right = false;
-				left = false;
-				down = false;
-			}else if(left && lastMoveRight==false){
-				velX = -speed;
-				velY = 0F;
-				
-				up = false;
-				right = false;
-				down = false;
-			}else if(down && lastMoveUp==false){
+			}else if(up){
 				velY = -speed;
 				velX = 0F;
-				
-				up = false;
-				left = false;
-				right = false;
+			}else if(left){
+				velX = -speed;
+				velY = 0F;
 			}else{
 				velX = 0F;
 				velY = 0F;
@@ -198,26 +246,7 @@ public class Actor {
 		isLife = false;
 	}
 	
-	public void changeDirection(){
-		if(up){
-			up=false;
-			down=true;
-		}
-		else if(down){
-			down=false;
-			up=true;
-		}
-		else if(right){
-			left=false;
-			right=true;
-		}
-		else if(left){
-			left=false;
-			right=true;
-		}
-		
-	}
-	
+
 	public double getCellX() { return Math.round(posX); }
 	
 	public double getCellY() { return Math.round(posY); }

@@ -95,9 +95,9 @@ public class MapRenderer {
 		
 		if(unit.isRight())
 			batch.draw(Asset.greenBallRightRegion, posX, posY, width, height);
-		else if(unit.isUp())
-			batch.draw(Asset.greenBallDownRegion, posX, posY, width, height);
 		else if(unit.isDown())
+			batch.draw(Asset.greenBallDownRegion, posX, posY, width, height);
+		else if(unit.isUp())
 			batch.draw(Asset.greenBallUpRegion, posX, posY, width, height);
 		else if(unit.isLeft())
 			batch.draw(Asset.greenBallLeftRegion, posX, posY, width, height);
