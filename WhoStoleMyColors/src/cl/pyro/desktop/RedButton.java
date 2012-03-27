@@ -6,7 +6,7 @@ public class RedButton extends MapElements {
 	public Rectangle boundsButton;
 	public RedButton(Map map, int posX, int posY) {
 		super(map, posX, posY);
-		boundsButton = new Rectangle(posX*32, posY*32, 32, 32);
+		boundsButton = new Rectangle(posX*32, posY*32, 64, 64);
 	}
 	
 

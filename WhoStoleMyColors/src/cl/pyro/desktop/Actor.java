@@ -1,5 +1,7 @@
 package cl.pyro.desktop;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public class Actor {
 	public double posX;
 	public double posY;
@@ -18,6 +20,11 @@ public class Actor {
 	private boolean lastMoveLeft=false;
 	private boolean lastMoveUp=false;
 	private boolean lastMoveDown=false;
+	
+	public boolean allowableUp=false;
+	public boolean allowableDown=false;
+	public boolean allowableLeft=false;
+	public boolean allowableRight=false;
 	
 	public double size=1;
 
@@ -100,6 +107,8 @@ public class Actor {
 				lastMoveDown=false;
 			}
 			
+			
+			
 			//Chequeamos la celda de la derecha
 			if(cellX!=14 && cellX + 1 < movements.length && movements[cellX+1][cellY].allowed)
 				right = true;
@@ -107,7 +116,7 @@ public class Actor {
 				right=false;
 			
 			//Chequeamos la celda de abajo
-			if(cellY!=0){
+			if(cellY!=9){
 			 if(movements[cellX][cellY + 1].allowed)
 				down = true;
 			else
@@ -116,17 +125,54 @@ public class Actor {
 				down=false;
 			
 			//Chequeamos la celda de arriba
-			 if(cellY!=9 && cellY + 1 < movements[cellY].length && movements[cellX][cellY-1].allowed)
+			if(cellY!=0){
+			 if(cellY - 1 < movements[cellY].length && movements[cellX][cellY-1].allowed)
 				up = true;
 			 else
 				up=false;
-			 
+			}else
+				up=false;
+			
 			//Chequeamos la celda de la izquierda 
-			 if(cellX!=0 && cellX - 1 > 0 && movements[cellX-1][cellY].allowed)
+			 if(cellX!=0  && movements[cellX-1][cellY].allowed)
 				left = true;
 			 else
 				left=false;
-			
+			 
+			 for(Box box : Map.boxes){
+					
+					if(right && OverlapTester.pointInRectangle(box.boundsBox, this.getRenderingCenterX()+32, this.getRenderingCenterY()))
+						if((int)this.getCellX()+2<=14 && Map.movementAllowed[(int)this.getCellX()+2][(int)this.getCellY()].allowed){
+							allowableRight=true;
+							right=true;}
+						else{
+						    allowableRight=false;
+						    right=false;}	
+					
+					if(down && OverlapTester.pointInRectangle(box.boundsBox, this.getRenderingCenterX(), this.getRenderingCenterY()+32))
+						if((int)this.getCellY()+2<=9 && Map.movementAllowed[(int)this.getCellX()][(int)this.getCellY()+2].allowed){
+							allowableDown=true;
+							down = true;}
+						else{
+							allowableDown=false;
+							down=false;}
+					
+					if(up && OverlapTester.pointInRectangle(box.boundsBox, this.getRenderingCenterX(), this.getRenderingCenterY()-32))
+						if((int)this.getCellY()-2>=0 && Map.movementAllowed[(int)this.getCellX()][(int)this.getCellY()-2].allowed){
+							allowableUp=true;
+							up = true;}
+						else{
+							allowableUp=false;
+							up=false;}				
+					
+					if(left && OverlapTester.pointInRectangle(box.boundsBox, this.getRenderingCenterX()-32, this.getRenderingCenterY()))
+						if((int)this.getCellX()-2>=0 && Map.movementAllowed[(int)this.getCellX()-2][(int)this.getCellY()].allowed){
+							allowableLeft=true;
+							left = true;}
+						else{
+							allowableLeft=false;
+							left=false;}
+					}
 			 
 			if(lastMoveRight==true){
 				if(right){
@@ -217,22 +263,49 @@ public class Actor {
 				down = false;}	
 			}
 			
+			 
+			
+			
 			if(right){
 				velX = speed;
 				velY = 0F;
 			}else if(down){
-				velY = +speed;
+				velY = speed;
 				velX = 0F;
 			}else if(up){
-				velY = -speed;
+				velY = speed*-1;
 				velX = 0F;
 			}else if(left){
-				velX = -speed;
+				velX = speed*-1;
 				velY = 0F;
 			}else{
 				velX = 0F;
 				velY = 0F;
 			}
+			
+			 for(Box box : Map.boxes){
+				 if(right && allowableRight){
+				 box.posX = this.getRenderingCenterX()+64;
+				 box.posY = this.getRenderingCenterY();
+				 box.boundsBox = new Rectangle(box.posX, box.posY, 32, 32);}
+				 else if(down && allowableDown){
+				 box.posX = this.getRenderingCenterX();
+				 box.posY = this.getRenderingCenterY()+64;
+				 box.boundsBox = new Rectangle(box.posX, box.posY, 32, 32);}
+				 else if(up && allowableUp){
+				 box.posX = this.getRenderingCenterX();
+				 box.posY = this.getRenderingCenterY()-64;
+				 box.boundsBox = new Rectangle(box.posX, box.posY, 32, 32);}
+				 else if(left && allowableLeft){
+				 box.posX = this.getRenderingCenterX()-64;
+				 box.posY = this.getRenderingCenterY();
+				 box.boundsBox = new Rectangle(box.posX, box.posY, 32, 32);}
+			 }
+
+			 allowableDown=false;
+			 allowableUp=false;
+			 allowableRight=false;
+			 allowableLeft=false;
 		}
 		this.move(deltaTime);
 	}

@@ -31,7 +31,6 @@ public class EpisodesScreen extends Screen {
 	public void update (float deltaTime) {
 		if (Gdx.input.justTouched()) {
 			touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			System.out.println("x: "+Gdx.input.getX()+" |y: "+Gdx.input.getY());
 			if (OverlapTester.pointInRectangle(playBounds, touchPoint.x, touchPoint.y)) {
 				Asset.playSound(Asset.paintSound);
 				game.setScreen(new LevelsScreen(game,1));

@@ -14,6 +14,7 @@ public class GameScreen extends Screen {
 	static final int GAME_READY = 0;
 	static final int GAME_RUNNING = 1;
 	static final int GAME_PAUSED = 2;
+	static final int GAME_HINT = 5;
 	static final int GAME_LEVEL_END = 3;
 	static final int GAME_OVER = 4;
 
@@ -66,6 +67,9 @@ public class GameScreen extends Screen {
 		case GAME_PAUSED:
 			updatePaused();
 			break;
+		case GAME_HINT:
+			updateHint();
+			break;
 		case GAME_LEVEL_END:
 			updateLevelEnd();
 			break;
@@ -95,6 +99,14 @@ public class GameScreen extends Screen {
 				state = GAME_PAUSED;
 				return;
 			}
+			
+			
+			for(SignHint hint : map.hints)
+					if (OverlapTester.pointInRectangle(hint.boundsSign, touchPoint.x, touchPoint.y) && Gdx.input.justTouched()){
+						hint.setActivate(true);
+						state = GAME_HINT;
+					}
+				
 		}
 		
 		//se dan instrucciones para mover al personaje y se actualiza el mapa
@@ -116,7 +128,6 @@ public class GameScreen extends Screen {
 	
 		if (Gdx.input.justTouched()) {
 			touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			System.out.println("x: "+Gdx.input.getX()+" |y: "+Gdx.input.getY());
 			if (OverlapTester.pointInRectangle(resumeBounds, touchPoint.x, touchPoint.y)) {
 				Asset.playSound(Asset.paintSound);
 				state = GAME_RUNNING;
@@ -131,10 +142,18 @@ public class GameScreen extends Screen {
 			if (OverlapTester.pointInRectangle(repeatBounds, touchPoint.x, touchPoint.y)) {
 				Asset.playSound(Asset.paintSound);
 				state = GAME_READY;
-				game.setScreen(new GameScreen(game,episode,level));
+				game.setScreen(new GameScreen(game,map.episode,map.level));
 				return;
 			}
 		}
+	}
+	
+	private void updateHint () {
+		if (Gdx.input.justTouched())
+		for(SignHint hint : map.hints){
+				hint.setActivate(false);
+				state = GAME_RUNNING;
+			}
 	}
 	
 	//update para cuando se termina el nivel, llama al mapa y lo renderiza nuevamente
@@ -196,8 +215,6 @@ public class GameScreen extends Screen {
 	}
 
 	private void presentPaused () {
-		if (Gdx.input.justTouched())
-			System.out.println("x: "+Gdx.input.getX()+"| y: "+Gdx.input.getY());
 		batcher.draw(Asset.pauseMenuRegion, 0, 0, 480, 320);
 	}
 
