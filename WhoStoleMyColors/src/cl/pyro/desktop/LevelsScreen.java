@@ -17,6 +17,8 @@ public class LevelsScreen extends Screen {
 	Rectangle level4Bounds;
 	Rectangle level5Bounds;
 	Rectangle level6Bounds;
+	Rectangle level7Bounds;
+	Rectangle level8Bounds;
 	Rectangle backBounds;
 	Vector3 touchPoint;
 	int episode;
@@ -32,6 +34,8 @@ public class LevelsScreen extends Screen {
 		level4Bounds = new Rectangle(205, 50, 50, 40);
 		level5Bounds = new Rectangle(270, 50, 50, 40);
 		level6Bounds = new Rectangle(335, 50, 50, 40);
+		level7Bounds = new Rectangle(400, 50, 50, 40);
+		level8Bounds = new Rectangle(10, 95, 50, 40);
 		//level3Bounds = new Rectangle(140, 50, 50, 40);
 		backBounds = new Rectangle(0, 320-50, 50, 50);
 		touchPoint = new Vector3();
@@ -78,6 +82,19 @@ public class LevelsScreen extends Screen {
 			if (OverlapTester.pointInRectangle(level6Bounds, touchPoint.x, touchPoint.y)) {
 				Asset.playSound(Asset.paintSound);
 				game.setScreen(new GameScreen(game,episode,6));
+				return;
+			}
+
+			if (OverlapTester.pointInRectangle(level7Bounds, touchPoint.x, touchPoint.y)) {
+				Asset.playSound(Asset.paintSound);
+				game.setScreen(new GameScreen(game,episode,7));
+				return;
+			}
+			
+
+			if (OverlapTester.pointInRectangle(level8Bounds, touchPoint.x, touchPoint.y)) {
+				Asset.playSound(Asset.paintSound);
+				game.setScreen(new GameScreen(game,episode,8));
 				return;
 			}
 			

@@ -367,6 +367,13 @@ public class Map {
 						trapbox.alreadyActive=true;
 						wall.setActivate(!wall.defectoValue);
 						movementAllowed[wall.cellX][wall.cellY].allowed=!wall.defectoValue;}	
+			}else{
+				trapbox.setActivate(false);
+				trapbox.alreadyActive=false;
+				for(WallBarrier wall : wallsBoxes)
+					if(wall.trapbox==trapbox){
+						wall.setActivate(wall.defectoValue);
+					movementAllowed[wall.cellX][wall.cellY].allowed=wall.defectoValue;}
 			}
 			
 
